@@ -1,33 +1,20 @@
-<!-- https://www.youtube.com/watch?v=XzLuMtDelGk&t=537s&ab_channel=UlbiTV 25:38    -->
+<!-- https://www.youtube.com/watch?v=XzLuMtDelGk&t=537s&ab_channel=UlbiTV 50:35    -->
 <template>
     <div class="app">
-        <form>
-            <input
-                class="input"
-                type="text"
-                name=""
-                placeholder="Название"
-                id=""
-            />
-            <input
-                class="input"
-                type="text"
-                name=""
-                placeholder="Описание"
-                id=""
-            />
-            <button class="btn">Создать</button>
-        </form>
-        <div class="post" v-for="post in posts">
-            <!--v-for - это директива для работы с массивами. Только что мы запустили цикл по итерации оъектов post в массиве postS-->
-            <div><strong>Название: </strong>{{ post.title }}</div>
-            <div><strong>Описание: </strong>{{ post.body }}</div>
-        </div>
+        <post-form @create="createPost" />
+        <post-list :posts="posts" />
+        <!--можно заместо v-bind:posts="posts" написать :posts="posts" -->
     </div>
 </template>
 
 <script>
+import PostForm from "./components/PostForm";
+import PostList from "./components/PostList";
 export default {
+    components: {
+        PostForm,
+        PostList,
+    },
     data() {
         return {
             posts: [
@@ -36,9 +23,15 @@ export default {
                 { id: 3, title: "Third", body: "Описание 3" },
                 { id: 3, title: "Four", body: "Описание 4" },
             ],
+            title: "",
+            body: "",
         };
     },
-    methods: {},
+    methods: {
+        createPost(post) {
+            this.posts.push(post);
+        },
+    },
 };
 </script>
 
@@ -50,25 +43,7 @@ export default {
 }
 .app {
     padding: 0px 20px;
-}
-form {
-    display: flex;
-    flex-direction: column;
-}
-.btn {
-    align-self: flex-end;
-    padding: 10px 15px;
-    background: none;
-}
-.post {
-    padding: 15px;
-    border: 2px solid black;
-    margin-top: 15px;
-}
-form .input {
-    width: 100%;
-    border: 2px solid green;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 </style>
