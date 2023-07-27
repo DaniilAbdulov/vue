@@ -27,7 +27,7 @@
         />
         <!--@input="body = $event.target.value" - то же самое, что и вызов функции inputTitle
             -->
-        <button class="btn" @click="createPost">Создать</button>
+        <my-button @click="createPost">Создать</my-button>
     </form>
 </template>
 
@@ -58,11 +58,6 @@ export default {
 form {
     display: flex;
     flex-direction: column;
-}
-.btn {
-    align-self: flex-end;
-    padding: 10px 15px;
-    background: none;
 }
 
 form .input {

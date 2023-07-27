@@ -28,6 +28,7 @@ export default {
         };
     },
     methods: {
+        //обязательно передаем post в функцию
         createPost(post) {
             this.posts.push(post);
         },
