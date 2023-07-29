@@ -1,4 +1,4 @@
-<!-- https://www.youtube.com/watch?v=XzLuMtDelGk&t=537s&ab_channel=UlbiTV 53:55    -->
+<!-- https://www.youtube.com/watch?v=XzLuMtDelGk&t=537s&ab_channel=UlbiTV 58:14    -->
 <template>
     <div class="app">
         <post-form @create="createPost" />

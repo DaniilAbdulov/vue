@@ -1,8 +1,7 @@
 <template>
     <form @submit.prevent>
-        <input
+        <my-input
             v-model="post.title"
-            class="input"
             type="text"
             name=""
             placeholder="Название"
@@ -16,10 +15,8 @@
         <!--v-bind:value="..." связывает данные с каким-то компонентом
                  @input="inputTitle" - подписываемся на событие инпут и из инпута забирать вэлью
             -->
-        <input
-            v-bind:value="post.body"
-            @input="post.body = $event.target.value"
-            class="input"
+        <my-input
+            v-model="post.body"
             type="text"
             name=""
             placeholder="Описание"
@@ -58,12 +55,5 @@ export default {
 form {
     display: flex;
     flex-direction: column;
-}
-
-form .input {
-    width: 100%;
-    border: 2px solid green;
-    margin-top: 10px;
-    margin-bottom: 10px;
 }
 </style>
