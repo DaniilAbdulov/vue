@@ -2,8 +2,9 @@
 <template>
     <div class="app">
         <post-form @create="createPost" />
-        <post-list :posts="posts" />
+        <post-list :posts="posts" @remove="removePost" />
         <!--можно заместо v-bind:posts="posts" написать :posts="posts" -->
+        <!--прослушиваем событие remove -->
     </div>
 </template>
 
@@ -21,7 +22,7 @@ export default {
                 { id: 1, title: "First", body: "Описание 1" },
                 { id: 2, title: "Second", body: "Описание 2" },
                 { id: 3, title: "Third", body: "Описание 3" },
-                { id: 3, title: "Four", body: "Описание 4" },
+                { id: 4, title: "Four", body: "Описание 4" },
             ],
             title: "",
             body: "",
@@ -32,8 +33,12 @@ export default {
         createPost(post) {
             this.posts.push(post);
         },
+        removePost(post) {
+            this.posts = this.posts.filter((p) => p.id !== post.id);
+        },
     },
 };
+//пробегаемся по массиву и оставляем посты с теми id, которые не равны post.id
 </script>
 
 <style>

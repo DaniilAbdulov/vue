@@ -1,8 +1,16 @@
 <template>
-    <div>
+    <div v-if="posts.length != 0">
+        <!--если массив постов пуст, то данный блок не будет выводиться, а выведется h2 v-else -->
         <h3>Список пользователей</h3>
-        <post-item v-for="post in posts" :post="post" />
+        <post-item
+            v-for="post in posts"
+            :post="post"
+            :key="post.id"
+            @remove="$emit('remove', post)"
+        />
+        <!--Так как пропсы изменять нельзя, то эмитим событие remove и отправляем его наверх, так же как в postItem-->
     </div>
+    <h2 v-else style="color: red">Список пуст</h2>
 </template>
 
 <script>

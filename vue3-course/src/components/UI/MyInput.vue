@@ -1,6 +1,7 @@
 <template>
-    <input :value="modelValue" @input="updateInput" class="input" type="text" />
+    <input :value="modelValue" @input="updateInput" type="text" class="input" />
 </template>
+
 <script>
 export default {
     name: "my-input",
