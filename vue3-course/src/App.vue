@@ -1,7 +1,15 @@
 <!-- https://www.youtube.com/watch?v=XzLuMtDelGk&t=537s&ab_channel=UlbiTV 58:14    -->
 <template>
     <div class="app">
-        <post-form @create="createPost" />
+        <h1>Page with posts</h1>
+        <my-button
+            @click="showDialog"
+            style="margin-top: 10px; margin-bottom: 10px"
+            >Create post</my-button
+        >
+        <my-dialog v-model:show="dialogVisible">
+            <post-form @create="createPost" />
+        </my-dialog>
         <post-list :posts="posts" @remove="removePost" />
         <!--можно заместо v-bind:posts="posts" написать :posts="posts" -->
         <!--прослушиваем событие remove -->
@@ -26,15 +34,20 @@ export default {
             ],
             title: "",
             body: "",
+            dialogVisible: false,
         };
     },
     methods: {
         //обязательно передаем post в функцию
         createPost(post) {
             this.posts.push(post);
+            this.dialogVisible = false;
         },
         removePost(post) {
             this.posts = this.posts.filter((p) => p.id !== post.id);
+        },
+        showDialog() {
+            this.dialogVisible = true;
         },
     },
 };
