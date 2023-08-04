@@ -1,4 +1,4 @@
-<!-- https://www.youtube.com/watch?v=XzLuMtDelGk&t=537s&ab_channel=UlbiTV 58:14    -->
+<!-- https://www.youtube.com/watch?v=XzLuMtDelGk&t=537s&ab_channel=UlbiTV 1:25:07    -->
 <template>
     <div class="app">
         <h1>Page with posts</h1>
@@ -10,7 +10,8 @@
         <my-dialog v-model:show="dialogVisible">
             <post-form @create="createPost" />
         </my-dialog>
-        <post-list :posts="posts" @remove="removePost" />
+        <post-list v-if="!loadingList" :posts="posts" @remove="removePost" />
+        <div v-else>Loading...</div>
         <!--можно заместо v-bind:posts="posts" написать :posts="posts" -->
         <!--прослушиваем событие remove -->
     </div>
@@ -19,6 +20,7 @@
 <script>
 import PostForm from "./components/PostForm";
 import PostList from "./components/PostList";
+import axios from "axios";
 export default {
     components: {
         PostForm,
@@ -26,15 +28,11 @@ export default {
     },
     data() {
         return {
-            posts: [
-                { id: 1, title: "First", body: "Описание 1" },
-                { id: 2, title: "Second", body: "Описание 2" },
-                { id: 3, title: "Third", body: "Описание 3" },
-                { id: 4, title: "Four", body: "Описание 4" },
-            ],
+            posts: [],
             title: "",
             body: "",
             dialogVisible: false,
+            loadingList: false,
         };
     },
     methods: {
@@ -49,9 +47,25 @@ export default {
         showDialog() {
             this.dialogVisible = true;
         },
+        async fetchPosts() {
+            try {
+                this.loadingList = true;
+                const response = await axios.get(
+                    "https://jsonplaceholder.typicode.com/posts?_limit=10"
+                );
+                this.posts = response.data;
+            } catch (error) {
+                alert(error);
+            } finally {
+                this.loadingList = false;
+            }
+        },
+    },
+    mounted() {
+        this.fetchPosts();
+        //mounted - это хук жизненного цикла/ Вызывается после монтирования экземпляра
     },
 };
-//пробегаемся по массиву и оставляем посты с теми id, которые не равны post.id
 </script>
 
 <style>

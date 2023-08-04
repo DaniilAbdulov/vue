@@ -10,7 +10,7 @@
         />
         <!--Так как пропсы изменять нельзя, то эмитим событие remove и отправляем его наверх, так же как в postItem-->
     </div>
-    <h2 v-else style="color: red">Список пуст</h2>
+    <h2 v-else style="color: red">List is empty</h2>
 </template>
 
 <script>
