@@ -3,6 +3,7 @@
         <div>
             <div><strong>Название: </strong>{{ post.title }}</div>
             <div><strong>Описание: </strong>{{ post.body }}</div>
+            <div class="timeCode">Время публикации:{{ post.id }}</div>
         </div>
         <div class="post__buttons">
             <my-button @click="$emit('remove', post)">Удалить</my-button>
@@ -30,5 +31,8 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+.timeCode {
+    font-style: italic;
 }
 </style>
