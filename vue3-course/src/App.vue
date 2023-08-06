@@ -20,7 +20,6 @@
 <script>
 import PostForm from "./components/PostForm";
 import PostList from "./components/PostList";
-import axios from "axios";
 export default {
     components: {
         PostForm,
@@ -50,10 +49,13 @@ export default {
         async fetchPosts() {
             try {
                 this.loadingList = true;
-                const response = await axios.get(
-                    "https://jsonplaceholder.typicode.com/posts?_limit=10"
+                const response = await fetch(
+                    "https://jsonplaceholder.typicode.com/posts?_limit=5"
                 );
-                this.posts = response.data;
+                if (!response.ok) {
+                    throw new Error("Error");
+                }
+                this.posts = await response.json();
             } catch (error) {
                 alert(error);
             } finally {
