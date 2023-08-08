@@ -2,15 +2,22 @@
 <template>
     <div class="app">
         <h1>Page with posts</h1>
-        <my-button
-            @click="showDialog"
-            style="margin-top: 10px; margin-bottom: 10px"
-            >Create post</my-button
-        >
+        <div class="app__btns">
+            <my-button
+                @click="showDialog"
+                style="margin-top: 10px; margin-bottom: 10px"
+                >Create post</my-button
+            >
+            <my-select v-model="selectedSort" :options="sortOptions" />
+        </div>
         <my-dialog v-model:show="dialogVisible">
             <post-form @create="createPost" />
         </my-dialog>
-        <post-list v-if="!loadingList" :posts="posts" @remove="removePost" />
+        <post-list
+            v-if="!loadingList"
+            :posts="sortedPosts"
+            @remove="removePost"
+        />
         <div v-else>Loading...</div>
         <!--можно заместо v-bind:posts="posts" написать :posts="posts" -->
         <!--прослушиваем событие remove -->
@@ -32,6 +39,12 @@ export default {
             body: "",
             dialogVisible: false,
             loadingList: false,
+            selectedSort: "",
+            sortOptions: [
+                { value: "title", name: "По названию" },
+                { value: "body", name: "По содержимому" },
+                { value: "id", name: "По дате" },
+            ],
         };
     },
     methods: {
@@ -67,6 +80,17 @@ export default {
         this.fetchPosts();
         //mounted - это хук жизненного цикла/ Вызывается после монтирования экземпляра
     },
+    computed: {
+        sortedPosts() {
+            return [
+                ...this.posts.sort((a, b) => {
+                    return a[this.selectedSort]?.localeCompare(
+                        b[this.selectedSort]
+                    );
+                }),
+            ];
+        },
+    },
 };
 </script>
 
@@ -80,5 +104,9 @@ export default {
     padding: 0px 20px;
     max-width: 1200px;
     margin: 0 auto;
+}
+.app__btns {
+    display: flex;
+    justify-content: space-between;
 }
 </style>
