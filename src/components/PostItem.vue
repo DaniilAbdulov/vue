@@ -1,6 +1,7 @@
 <template>
     <div class="post">
         <div>
+            <div>id: {{ post.id }}</div>
             <div><strong>Название: </strong>{{ post.title }}</div>
             <div><strong>Описание: </strong>{{ post.body }}</div>
             <div v-if="post.time" class="timeCode">
@@ -34,6 +35,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 10px;
 }
 .timeCode {
     font-style: italic;

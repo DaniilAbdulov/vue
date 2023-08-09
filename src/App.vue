@@ -2,6 +2,7 @@
 <template>
     <div class="app">
         <h1>Page with posts</h1>
+        <my-input v-model="searchQuery" placeholder="Search" />
         <div class="app__btns">
             <my-button
                 @click="showDialog"
@@ -15,20 +16,27 @@
         </my-dialog>
         <post-list
             v-if="!loadingList"
-            :posts="sortedPosts"
+            :posts="sortedAndSearchedPosts"
             @remove="removePost"
         />
         <div v-else>Loading...</div>
+        <post-pages
+            v-model="postPage"
+            :totalPage="totalPage"
+            :postPage="postPage"
+        ></post-pages>
     </div>
 </template>
 
 <script>
 import PostForm from "./components/PostForm";
 import PostList from "./components/PostList";
+import PostPages from "./components/PostPages.vue";
 export default {
     components: {
         PostForm,
         PostList,
+        PostPages,
     },
     data() {
         return {
@@ -38,6 +46,10 @@ export default {
             dialogVisible: false,
             loadingList: false,
             selectedSort: "",
+            searchQuery: "",
+            postPage: 1,
+            postLimit: 10,
+            totalPage: 0,
             sortOptions: [
                 { value: "title", name: "По названию" },
                 { value: "body", name: "По содержимому" },
@@ -57,16 +69,22 @@ export default {
         showDialog() {
             this.dialogVisible = true;
         },
+        changePage(pageNumber) {
+            this.postPage = pageNumber;
+        },
         async fetchPosts() {
             try {
                 this.loadingList = true;
                 const response = await fetch(
-                    "https://jsonplaceholder.typicode.com/posts?_limit=5"
+                    `https://jsonplaceholder.typicode.com/posts?_limit=${this.postLimit}&_page=${this.postPage}`
                 );
                 if (!response.ok) {
                     throw new Error("Error");
                 }
                 this.posts = await response.json();
+                this.totalPage = Math.ceil(
+                    response.headers.get("x-total-count") / this.postLimit
+                );
             } catch (error) {
                 alert(error);
             } finally {
@@ -90,11 +108,22 @@ export default {
                             b[this.selectedSort]
                         );
                     } else {
-                        // Используйте оператор "-", а не сравнение ">"
                         return a[this.selectedSort] - b[this.selectedSort];
                     }
                 }),
             ];
+        },
+        sortedAndSearchedPosts() {
+            return this.sortedPosts.filter(
+                (post) =>
+                    post.title.includes(this.searchQuery) ||
+                    post.body.includes(this.searchQuery)
+            );
+        },
+    },
+    watch: {
+        postPage() {
+            this.fetchPosts();
         },
     },
 };
