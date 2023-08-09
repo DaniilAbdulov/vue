@@ -41,6 +41,11 @@ export default {
     methods: {
         createPost() {
             this.post.id = Date.now();
+            this.post.time = new Intl.DateTimeFormat("ru", {
+                dateStyle: "long",
+                timeStyle: "short",
+                timeZone: "Asia/Yekaterinburg",
+            }).format(Date.now());
             this.$emit("create", this.post);
             this.post = {
                 title: "",

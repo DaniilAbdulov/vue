@@ -19,8 +19,6 @@
             @remove="removePost"
         />
         <div v-else>Loading...</div>
-        <!--можно заместо v-bind:posts="posts" написать :posts="posts" -->
-        <!--прослушиваем событие remove -->
     </div>
 </template>
 
@@ -84,9 +82,17 @@ export default {
         sortedPosts() {
             return [
                 ...this.posts.sort((a, b) => {
-                    return a[this.selectedSort]?.localeCompare(
-                        b[this.selectedSort]
-                    );
+                    if (
+                        typeof a[this.selectedSort] === "string" &&
+                        typeof b[this.selectedSort] === "string"
+                    ) {
+                        return a[this.selectedSort]?.localeCompare(
+                            b[this.selectedSort]
+                        );
+                    } else {
+                        // Используйте оператор "-", а не сравнение ">"
+                        return a[this.selectedSort] - b[this.selectedSort];
+                    }
                 }),
             ];
         },
