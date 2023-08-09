@@ -14,6 +14,11 @@
         <my-dialog v-model:show="dialogVisible">
             <post-form @create="createPost" />
         </my-dialog>
+        <post-pages
+            v-model="postPage"
+            :totalPage="totalPage"
+            :postPage="postPage"
+        ></post-pages>
         <post-list
             v-if="!loadingList"
             :posts="sortedAndSearchedPosts"
