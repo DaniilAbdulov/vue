@@ -6,7 +6,7 @@
             <div v-if="post.time" class="timeCode">
                 Время публикации: {{ post.time }}
             </div>
-            <div v-else>Время публикации: -</div>
+            <div v-else class="timeCode">Время публикации: -</div>
         </div>
         <div class="post__buttons">
             <my-button @click="$emit('remove', post)">Удалить</my-button>
