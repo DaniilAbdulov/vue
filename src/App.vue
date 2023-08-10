@@ -14,34 +14,29 @@
         <my-dialog v-model:show="dialogVisible">
             <post-form @create="createPost" />
         </my-dialog>
-        <post-pages
-            v-model="postPage"
-            :totalPage="totalPage"
-            :postPage="postPage"
-        ></post-pages>
         <post-list
             v-if="!loadingList"
             :posts="sortedAndSearchedPosts"
             @remove="removePost"
         />
         <div v-else>Loading...</div>
-        <post-pages
+        <div ref="observer" class="observer"></div>
+        <!-- <post-pages
             v-model="postPage"
             :totalPage="totalPage"
             :postPage="postPage"
-        ></post-pages>
+        ></post-pages> -->
     </div>
 </template>
 
 <script>
 import PostForm from "./components/PostForm";
 import PostList from "./components/PostList";
-import PostPages from "./components/PostPages.vue";
+import axios from "axios";
 export default {
     components: {
         PostForm,
         PostList,
-        PostPages,
     },
     data() {
         return {
@@ -74,32 +69,76 @@ export default {
         showDialog() {
             this.dialogVisible = true;
         },
-        changePage(pageNumber) {
-            this.postPage = pageNumber;
-        },
+        // changePage(pageNumber) {
+        //     this.postPage = pageNumber;
+        // },
         async fetchPosts() {
             try {
                 this.loadingList = true;
-                const response = await fetch(
-                    `https://jsonplaceholder.typicode.com/posts?_limit=${this.postLimit}&_page=${this.postPage}`
+                const response = await axios.get(
+                    `https://jsonplaceholder.typicode.com/posts`,
+                    {
+                        params: {
+                            _page: this.postPage,
+                            _limit: this.postLimit,
+                        },
+                    }
                 );
-                if (!response.ok) {
+                if (response.status >= 400) {
                     throw new Error("Error");
                 }
-                this.posts = await response.json();
+
                 this.totalPage = Math.ceil(
-                    response.headers.get("x-total-count") / this.postLimit
+                    response.headers["x-total-count"] / this.postLimit
                 );
+                this.posts = await response.data;
             } catch (error) {
                 alert(error);
             } finally {
                 this.loadingList = false;
             }
         },
+        async loadMorePosts() {
+            try {
+                // this.loadingList = true;
+                this.postPage += 1;
+                const response = await fetch(
+                    `https://jsonplaceholder.typicode.com/posts?_page=${this.postPage}&_limit=${this.postLimit}`
+                );
+
+                if (!response.ok) {
+                    throw new Error("Error");
+                }
+
+                const totalCount = parseInt(
+                    response.headers.get("x-total-count"),
+                    10
+                );
+                this.totalPage = Math.ceil(totalCount / this.postLimit);
+                const data = await response.json();
+                this.posts = [...this.posts, ...data];
+            } catch (error) {
+                alert(error);
+            }
+            // finally {
+            //     this.loadingList = false;
+            // }
+        },
     },
     mounted() {
         this.fetchPosts();
-        //mounted - это хук жизненного цикла/ Вызывается после монтирования экземпляра
+        //  console.log(this.$refs.observer); // <div ref="observer" class="observer"></div> Таким способом во Vue монжно получить доступ к DOM элементу
+        let options = {
+            rootMargin: "0px",
+            threshold: 1.0,
+        };
+        const callback = (entries, observer) => {
+            if (entries[0].isIntersecting && this.postPage < this.totalPage) {
+                this.loadMorePosts();
+            }
+        };
+        let observer = new IntersectionObserver(callback, options);
+        observer.observe(this.$refs.observer);
     },
     computed: {
         sortedPosts() {
@@ -127,9 +166,9 @@ export default {
         },
     },
     watch: {
-        postPage() {
-            this.fetchPosts();
-        },
+        // postPage() {
+        //     this.fetchPosts();
+        // },
     },
 };
 </script>
@@ -148,5 +187,9 @@ export default {
 .app__btns {
     display: flex;
     justify-content: space-between;
+}
+.observer {
+    height: 30px;
+    border: 1px solid black;
 }
 </style>
