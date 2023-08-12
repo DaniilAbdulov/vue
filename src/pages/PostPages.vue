@@ -2,7 +2,7 @@
 <template>
     <div>
         <h1>Page with posts</h1>
-        <my-input v-model="searchQuery" placeholder="Search" />
+        <my-input v-focus v-model="searchQuery" placeholder="Search" />
         <div class="app__btns">
             <my-button
                 @click="showDialog"
@@ -20,7 +20,7 @@
             @remove="removePost"
         />
         <div v-else>Loading...</div>
-        <div ref="observer" class="observer"></div>
+        <div v-intersection="loadMorePosts" class="observer"></div>
         <!-- <post-pages
             v-model="postPage"
             :totalPage="totalPage"
@@ -128,17 +128,17 @@ export default {
     mounted() {
         this.fetchPosts();
         //  console.log(this.$refs.observer); // <div ref="observer" class="observer"></div> Таким способом во Vue монжно получить доступ к DOM элементу
-        let options = {
-            rootMargin: "0px",
-            threshold: 1.0,
-        };
-        const callback = (entries, observer) => {
-            if (entries[0].isIntersecting && this.postPage < this.totalPage) {
-                this.loadMorePosts();
-            }
-        };
-        let observer = new IntersectionObserver(callback, options);
-        observer.observe(this.$refs.observer);
+        // let options = {
+        //     rootMargin: "0px",
+        //     threshold: 1.0,
+        // };
+        // const callback = (entries, observer) => {
+        //     if (entries[0].isIntersecting && this.postPage < this.totalPage) {
+        //         this.loadMorePosts();
+        //     }
+        // };
+        // let observer = new IntersectionObserver(callback, options);
+        // observer.observe(this.$refs.observer);
     },
     computed: {
         sortedPosts() {
