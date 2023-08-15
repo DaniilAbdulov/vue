@@ -21,22 +21,24 @@
         />
         <div v-else>Loading...</div>
         <div v-intersection="loadMorePosts" class="observer"></div>
-        <!-- <post-pages
+        <list-of-page
             v-model="postPage"
             :totalPage="totalPage"
             :postPage="postPage"
-        ></post-pages> -->
+        ></list-of-page>
     </div>
 </template>
 
 <script>
 import PostForm from "@/components/PostForm";
 import PostList from "@/components/PostList";
+import ListOfPage from "@/components/ListOfPage.vue";
 import axios from "axios";
 export default {
     components: {
         PostForm,
         PostList,
+        ListOfPage,
     },
     data() {
         return {
