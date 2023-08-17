@@ -5,6 +5,11 @@
             <my-button @click="$router.push('/about')">About</my-button>
             <my-button @click="$router.push('/posts')">Posts</my-button>
             <my-button @click="$router.push('/store')">Vuex</my-button>
+            <my-button
+                style="margin-left: 20px"
+                @click="$router.push('/composition')"
+                >Composition</my-button
+            >
         </div>
     </div>
 </template>

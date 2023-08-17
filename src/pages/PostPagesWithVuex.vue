@@ -1,4 +1,3 @@
-<!-- https://www.youtube.com/watch?v=XzLuMtDelGk&t=537s&ab_channel=UlbiTV 1:25:07    -->
 <template>
     <div>
         <h1 style="color: red">Page with posts</h1>
@@ -42,11 +41,6 @@ export default {
         PostForm,
         PostList,
     },
-    data() {
-        return {
-            dialogVisible: false,
-        };
-    },
     methods: {
         ...mapMutations({
             setPostPage: "post/setPostPage",
@@ -58,10 +52,8 @@ export default {
             fetchPosts: "post/fetchPosts",
             createPost: "post/createPost",
             removePost: "post/removePost",
+            showDialog: "post/showDialog",
         }),
-        showDialog() {
-            this.dialogVisible = true;
-        },
     },
     mounted() {
         this.fetchPosts();
@@ -70,6 +62,7 @@ export default {
         ...mapState({
             posts: (state) => state.post.posts,
             loadingList: (state) => state.post.loadingList,
+            dialogVisible: (state) => state.post.dialogVisible,
             selectedSort: (state) => state.post.selectedSort,
             searchQuery: (state) => state.post.searchQuery,
             postPage: (state) => state.post.postPage,
@@ -82,7 +75,6 @@ export default {
             sortedAndSearchedPosts: "post/sortedAndSearchedPosts",
         }),
     },
-    watch: {},
 };
 </script>
 

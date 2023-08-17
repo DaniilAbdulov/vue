@@ -60,7 +60,6 @@ export default {
         };
     },
     methods: {
-        //обязательно передаем post в функцию
         createPost(post) {
             this.posts.push(post);
             this.dialogVisible = false;
@@ -71,9 +70,6 @@ export default {
         showDialog() {
             this.dialogVisible = true;
         },
-        // changePage(pageNumber) {
-        //     this.postPage = pageNumber;
-        // },
         async fetchPosts() {
             try {
                 this.loadingList = true;
@@ -102,7 +98,6 @@ export default {
         },
         async loadMorePosts() {
             try {
-                // this.loadingList = true;
                 this.postPage += 1;
                 const response = await fetch(
                     `https://jsonplaceholder.typicode.com/posts?_page=${this.postPage}&_limit=${this.postLimit}`
@@ -122,25 +117,10 @@ export default {
             } catch (error) {
                 alert(error);
             }
-            // finally {
-            //     this.loadingList = false;
-            // }
         },
     },
     mounted() {
         this.fetchPosts();
-        //  console.log(this.$refs.observer); // <div ref="observer" class="observer"></div> Таким способом во Vue монжно получить доступ к DOM элементу
-        // let options = {
-        //     rootMargin: "0px",
-        //     threshold: 1.0,
-        // };
-        // const callback = (entries, observer) => {
-        //     if (entries[0].isIntersecting && this.postPage < this.totalPage) {
-        //         this.loadMorePosts();
-        //     }
-        // };
-        // let observer = new IntersectionObserver(callback, options);
-        // observer.observe(this.$refs.observer);
     },
     computed: {
         sortedPosts() {
@@ -166,11 +146,6 @@ export default {
                     post.body.includes(this.searchQuery)
             );
         },
-    },
-    watch: {
-        // postPage() {
-        //     this.fetchPosts();
-        // },
     },
 };
 </script>

@@ -5,6 +5,7 @@ export const PostModule = {
         title: "",
         body: "",
         loadingList: false,
+        dialogVisible: false,
         selectedSort: "",
         searchQuery: "",
         postPage: 1,
@@ -48,6 +49,9 @@ export const PostModule = {
         setLoading(state, bool) {
             state.loadingList = bool;
         },
+        setVisible(state, bool) {
+            state.dialogVisible = bool;
+        },
         setSelectedSort(state, selectedSort) {
             state.selectedSort = selectedSort;
         },
@@ -67,6 +71,9 @@ export const PostModule = {
             state.posts = state.posts.filter(
                 (post) => post.id !== postToRemove.id
             );
+        },
+        SHOW_DIALOG(state, bool) {
+            state.dialogVisible = bool;
         },
     },
     actions: {
@@ -123,9 +130,13 @@ export const PostModule = {
         },
         createPost({ commit }, post) {
             commit("CREATE_POST", post);
+            commit("setVisible", false);
         },
         removePost({ commit }, post) {
             commit("REMOVE_POST", post);
+        },
+        showDialog({ commit }, dialogVisible) {
+            commit("SHOW_DIALOG", true);
         },
     },
     namespaced: true,
